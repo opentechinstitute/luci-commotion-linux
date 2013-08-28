@@ -1,0 +1,2 @@
+contrib/uci/uci.git/uci.h /usr/include
+contrib/uci/uci.git/uci_config.h /usr/include

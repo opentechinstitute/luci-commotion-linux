@@ -1,0 +1,95 @@
+.apps {
+border:2px dashed #ff6699;
+margin-top:8px;
+}
+
+.app {
+padding:10px;
+min-height:85px;
+}
+
+.app-inner {
+  position:relative;
+  min-height:85px;
+}
+
+.app img {
+padding-right:10px;
+}
+
+.app .name, .app .description {
+  margin-right:100px;
+}
+
+.div-bar {
+height:1px;
+background:#DDDDDD;
+width:100%;
+margin:10px 0;
+}
+
+a, a:focus { outline: 0; }
+
+.notice {
+background:#ffbdd3;
+border:2px solid #FF6699;
+border-radius:5px;
+padding:5px;
+margin:5px 0;
+}
+
+.error {
+color:#FF6699;
+font-weight:bold;
+}
+
+#maincontent .apps_form label { width:180px; }
+
+.apps_form #apps_advanced {
+width:180px;
+text-align:right;
+}
+
+.name h4 { display:inline-block; color:#000000; }
+.app-tooltip { 
+	display:none; 
+	background:#ffffff; 
+	border: 1px #DDDDDD solid;
+	box-shadow: 2px 2px 8px #dddddd;
+	padding:10px;
+	bottom:9px;
+	left:20px;
+}
+.app-info { height:18px; position:relative; display:inline-block; }
+.info-button { position:absolute; top:0; left:0; }
+.app-info:hover .app-tooltip { display:block; position:absolute; }
+
+.signature, .colorprint { font-family: "Courier New"; font-weight:bold; font-size: 14px; }
+
+button.approve { background: url("check.png") no-repeat left center; }
+button.blacklist {background: url("x.png") no-repeat left center; }
+a.edit {background: url("equals.png") no-repeat left center; padding:10px 0 10px 40px;}
+
+button.approve, button.blacklist, a.edit {
+color:#FF6699;
+font-weight:bold;
+height:36px;
+margin-right:20px;
+padding-left:40px;
+box-shadow:none;
+}
+
+button:hover, a:hover {
+color:#66CCFF !important;
+text-decoration:underline;
+}
+
+fieldset legend { padding-top:0; }
+
+.app-canvas {
+  position: absolute;
+  width: 85px;
+  height: 100%;
+  top: 5px;
+  right: 5px;
+}

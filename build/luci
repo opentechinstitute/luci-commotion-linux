@@ -1,0 +1,17 @@
+#!/bin/sh
+
+INSTALL_DIR=/opt/luci-commotion
+LUA_MODULEDIR=/usr/lib/lua
+LUA_LIBRARYDIR=/usr/lib/lua
+
+export LD_LIBRARY_PATH="$INSTALL_DIR/usr/lib:$LD_LIBRARY_PATH"
+[ `uname -s` = "Darwin" ] && export DYLD_LIBRARY_PATH="$INSTALL_DIR/usr/lib:$DYLD_LIBRARY_PATH"
+export PATH="$INSTALL_DIR/bin:$INSTALL_DIR/usr/bin:$PATH"
+export LUA_PATH="$INSTALL_DIR/$LUA_MODULEDIR/?.lua;$INSTALL_DIR/$LUA_MODULEDIR/?/init.lua;;"
+export LUA_CPATH="$INSTALL_DIR/$LUA_LIBRARYDIR/?.so;;"
+export LUCI_SYSROOT="$INSTALL_DIR"
+
+$INSTALL_DIR/usr/sbin/uhttpd -p 127.0.0.1:8080 -h $INSTALL_DIR/www -f
+#lua $INSTALL_DIR/bin/lucid.lua
+
+exit

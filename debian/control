@@ -1,0 +1,14 @@
+Source: luci-commotion
+Section: httpd
+Priority: optional
+Maintainer: Dan Staples <danstaples@opentechinstitute.org>
+Build-Depends: debhelper (>= 8.0.0), lua5.1, liblua5.1-0-dev, libc6-dev (>= 2.14)
+Standards-Version: 3.9.3
+Homepage: http://luci.subsignal.org/
+
+Package: luci-commotion
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, lua5.1, libc6-dev (>= 2.14), serval-crypto (>= 2.1), avahi-daemon, adduser
+Description: LuCI is a WUI for embedded devices.
+ LuCI is a free, clean, extensible and easily maintainable
+ web user interface for embedded devices.

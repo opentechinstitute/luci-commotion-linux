@@ -1,0 +1,7 @@
+#!/bin/sh
+uci batch <<-EOF
+	set luci.themes.Commotion=/luci-static/commotion
+	set luci.main.mediaurlbase=/luci-static/commotion
+	commit luci
+EOF
+exit 0
