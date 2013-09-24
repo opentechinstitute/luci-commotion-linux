@@ -2,7 +2,7 @@ Source: luci-commotion
 Section: httpd
 Priority: optional
 Maintainer: Dan Staples <danstaples@opentechinstitute.org>
-Build-Depends: debhelper (>= 8.0.0), lua5.1, liblua5.1-0-dev, libc6-dev (>= 2.14)
+Build-Depends: debhelper (>= 8.0.0), lua5.1, liblua5.1-0-dev, libc6-dev (>= 2.14), subversion
 Standards-Version: 3.9.3
 Homepage: http://luci.subsignal.org/
 
