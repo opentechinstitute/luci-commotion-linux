@@ -4,6 +4,43 @@ function DIE(str)
 	luci.http.close()
 end
 
+--- Redirects a page to https if the path is within the "node" path.
+-- @param node  node path to check. format as such -> "/NODE/" 
+-- @param env A table containing the REQUEST_URI and the SERVER_NAME. Can take full luci.http.getenv()
+-- @return True if page is to be redirected. False if path does not include node or if https is already on.
+function check_https(node, env)
+   if string.match(env.REQUEST_URI, node) then
+	  if env.HTTPS ~= "on" then
+		 luci.http.redirect("https://"..env.SERVER_NAME..env.REQUEST_URI)
+		 return true
+	  end
+	  return false
+   end
+   return false
+end
+
+--- Gives the md5 and sha1 fingerprints of uhttpd server.
+--- Call as such: md5, sha1 = ssl_cert_fingerprints() If you only give one var name it will only give you md5. Call like: _, sha1 = to throw away md5
+-- @return md5 and sha1 hash of uhttpd.
+function ssl_cert_fingerprints()
+   --get cert file from /etc/config/uhttpd
+   local uci = luci.model.uci.cursor()
+   local cert = uci:get('uhttpd','main','cert')
+   --get md5 and sha1 hash's of cert file
+   local md5 = luci.sys.exec("md5sum "..cert)
+   local sha1 = luci.sys.exec("sha1sum "..cert)
+   -- remove the filename and extra spaces then uppercase the cert string
+   sha1 = string.upper(sha1:match("(%w*)%s*"..cert))
+   md5 = string.upper(md5:match("(%w*)%s*"..cert))
+   --add colons between pairs of two chars
+   sha1 = sha1:gsub("(%w%w)", "%1:")
+   md5 = md5:gsub("(%w%w)", "%1:")
+   --remove the final colon
+   sha1 = sha1:sub(1, -2)
+   md5 = md5:sub(1,-2)
+   return md5, sha1
+end
+
 function uci_encode(str)
   if (str) then
     str = string.gsub (str, "([^%w])", function(c) return '_' .. tostring(string.byte(c)) end)
@@ -85,7 +122,6 @@ function is_email(email)
    return tostring(email):match("[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?")
 end
 
-
 function is_hostname(str)
 --alphanumeric and hyphen Less than 63 chars
 --cannot start or end with a hyphen
@@ -93,6 +129,17 @@ function is_hostname(str)
 	  return tostring(str):match("^%w[%w%-]*%w$")
    else
 	  return nil
+   end
+end
+
+function is_fqdn(str)
+-- alphanumeric and hyphen less than 255 chars
+-- each label must be less than 63 chars
+   if #tostring(str) < 255 then
+	-- Should check that each label is < 63 chars --
+	return tostring(str):match("^[%w%.%-]+$")
+   else
+	return nil
    end
 end
 
@@ -112,6 +159,14 @@ end
 
 function is_port(str)
 	return is_uint(str) and tonumber(str) >= 0 and tonumber(str) <= 65535
+end
+
+function is_valid_uci(str)
+	return str:find("^[%w_]+$")
+end
+
+function pass_to_shell(str)
+	return str:gsub("$(","\\$"):gsub("`","\\`")
 end
 
 function table.contains(table, element)
