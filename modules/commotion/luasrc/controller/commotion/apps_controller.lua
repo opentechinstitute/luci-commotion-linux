@@ -287,6 +287,7 @@ function action_add(edit_app)
 	local allowpermanent = uci:get("applications","settings","allowpermanent")
 	local autoapprove = uci:get("applications","settings","autoapprove")
 	local checkconnect = uci:get("applications","settings","checkconnect")
+	local uri = require "uri"
 	
 	values = {
 		  name =  luci.http.formvalue("name"),
@@ -307,6 +308,13 @@ function action_add(edit_app)
 	for i, val in pairs({"name","ipaddr","description","icon"}) do
 		if (not luci.http.formvalue(val) or luci.http.formvalue(val) == '') then
 			error_info[val] = "Missing value"
+		end
+	end
+	
+	if not is_ip4addr(values.ipaddr) then 
+		local scheme = uri:new(values.ipaddr):scheme()
+		if (scheme ~= "http" and scheme ~= "https") then
+			error_info.ipaddr = "Invalid URL"
 		end
 	end
 	
