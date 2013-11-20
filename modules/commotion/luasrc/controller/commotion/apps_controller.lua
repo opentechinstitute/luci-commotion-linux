@@ -60,7 +60,7 @@ function action_logout()
     dsp.context.urltoken.stok = nil
   end
   
-  luci.http.header("Set-Cookie", "sysauth=; path=" .. dsp.build_url())
+  luci.http.header("Set-Cookie", "sysauth=; path=" .. dsp.build_url() .. "; secure; httpOnly;")
   luci.http.redirect(luci.dispatcher.build_url())
 end
 
