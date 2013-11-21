@@ -1,4 +1,4 @@
-#!/usr/bin/lua
+#!/usr/bin/lua5.1
 
 dofile "../../build/setup.lua"
 
