@@ -17,24 +17,24 @@
     <div class="cbi-value">
       <label class="cbi-value-title">Application Name:</label>
       <div class="cbi-value-field">
-  	<input type="text"  name="name" <% if app then %>value="<%=app.name%>"<% end %>/>
-  	<%if err then%><div class="error"><%=err.name%></div><%end%>
+  	<input type="text" maxlength="254" name="name" <% if app then %>value="<%=app.name%>"<% end %>/>
+  	<%if err and err.name then%><div class="error"><%=err.name%></div><%end%>
   	<div class="cbi-value-description">This is how your application will be known and displayed.</div>
       </div>
     </div>
     <div class="cbi-value">
       <label class="cbi-value-title">Description:</label>
       <div class="cbi-value-field">
-        <textarea rows="5"  name="description"><% if app then %><%=app.description%><% end %></textarea>
-        <%if err then%><div class="error"><%=err.description%></div><%end%>
+        <textarea rows="5" maxlength="254" name="description"><% if app then %><%=app.description%><% end %></textarea>
+        <%if err and err.description then%><div class="error"><%=err.description%></div><%end%>
         <div class="cbi-value-description">The description should include a one paragraph summary of the application and any other relevant information.</div>
       </div>
     </div>
     <div class="cbi-value">
       <label class="cbi-value-title" data-tip="For non web-apps, this should point to an information page telling the user how to connect to the application.">IP Address or URL of Service:</label>
       <div class="cbi-value-field">
-   	<input type="text"  name="uri" <% if app then %>value="<%=app.uri%>"<% end %>/>
-   	<%if err then%><div class="error"><%=err.uri%></div><%end%>
+   	<input type="text" maxlength="254" name="uri" <% if app then %>value="<%=app.uri%>"<% end %>/>
+   	<%if err and err.uri then%><div class="error"><%=err.uri%></div><%end%>
    	<div class="cbi-value-description">An IP address or URL where the application can be reached.</div>
       </div>
     </div>
@@ -48,8 +48,8 @@
     <div class="cbi-value">
       <label class="cbi-value-title">URL of application Icon:</label>
       <div class="cbi-value-field">
-  	<input type="text" name="icon" <% if app then %>value="<%=app.icon%>"<% end %>/>
-  	<%if err then%><div class="error"><%=err.icon%></div><%end%>
+  	<input type="text" maxlength="254" name="icon" <% if app then %>value="<%=app.icon%>"<% end %>/>
+  	<%if err and err.icon then%><div class="error"><%=err.icon%></div><%end%>
   	<div class="cbi-value-description">This should be a URL of an image file that will be displayed next to the listing of your application.</div>
       </div>
     </div>
@@ -73,16 +73,16 @@
       <div class="cbi-value">
         <label class="cbi-value-title" data-tip="The port of the application or a web page describing how to connect to the application.">Port of Service (Optional):</label>
         <div class="cbi-value-field">
-  	  <input type="text"  name="port" <% if app then %>value="<%=app.port%>"<% end %>/>
-  	  <%if err then%><div class="error"><%=err.port%></div><%end%>
+  	  <input type="text" maxlength="5" name="port" <% if app then %>value="<%=app.port%>"<% end %>/>
+  	  <%if err and err.port then%><div class="error"><%=err.port%></div><%end%>
   	  <div class="cbi-value-description">If no port is given, it will default to port 80.</div>
         </div>
       </div>
       <div class="cbi-value">                                                                                                                                             
         <label class="cbi-value-title" data-tip="If the number of hops is greater than zero, the application will be visible from other Commotion nodes in the network. Otherwise, it will only be seen on this node.">Number of hops away this service should be seen (Optional):</label>
         <div class="cbi-value-field">
-          <input type="text" name="ttl" <% if app then %>value="<%=app.ttl%>"<% end %>/>
-          <%if err then%><div class="error"><%=err.ttl%></div><%end%>
+          <input type="text" maxlength="2" name="ttl" <% if app then %>value="<%=app.ttl%>"<% else %>value="5"<% end %>/>
+          <%if err and err.ttl then%><div class="error"><%=err.ttl%></div><%end%>
           <div class="cbi-value-description">How many nodes away your application will be seen.</div>
         </div>
       </div>
@@ -90,7 +90,7 @@
       <div class="cbi-value">
         <label class="cbi-value-title" data-tip="If this is checked, the application will not be removed from the applications list after the default expiration period.">Is this application permanent?</label>
         <div class="cbi-value-field">
-          <input type="checkbox" name="permanent" value="1" <% if app and app.permanent == "1" then %>checked<% end %>/>
+          <input type="checkbox" name="permanent" value="1" <% if app and app.lifetime == "0" or not app then %>checked<% end %>/>
           <div class="cbi-value-description">If checked, application will not expire.</div>
 	</div>
       </div>
