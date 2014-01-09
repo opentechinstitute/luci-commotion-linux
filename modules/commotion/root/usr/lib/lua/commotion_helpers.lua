@@ -49,11 +49,17 @@ function uci_encode(str)
 end
 
 function html_encode(str)
-  return string.gsub(str,"[<>&\n\r\"]",function(c) return html_replacements[c] or c end)
+  if (str) then
+    str = string.gsub(str,"[<>&\n\r\"]",function(c) return html_replacements[c] or c end)
+  end
+  return str
 end
 
 function url_encode(str)
-  return string.gsub(str,"[<>%s]",function(c) return url_replacements[c] or c end)
+  if (str) then
+    str = string.gsub(str,"[<>%s]",function(c) return url_replacements[c] or c end)
+  end
+  return str
 end
 
 function printf(tmpl,t)
