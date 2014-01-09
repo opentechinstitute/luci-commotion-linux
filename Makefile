@@ -1,7 +1,7 @@
 include build/config.mk
 
 #MODULES = contrib/* applications/* libs/* modules/* themes/* i18n/*
-MODULES = contrib/lar contrib/luasrcdiet contrib/uci contrib/uhttpd libs/* modules/admin-core modules/commotion themes/base themes/commotion
+MODULES = contrib/lar contrib/luasrcdiet contrib/uci contrib/uhttpd libs/* modules/admin-core modules/lua-uri modules/commotion themes/base themes/commotion
 
 OS:=$(shell uname)
 MODULES:=$(foreach item,$(wildcard $(MODULES)),$(if $(realpath $(wildcard $(item)/Makefile)),$(item)))
