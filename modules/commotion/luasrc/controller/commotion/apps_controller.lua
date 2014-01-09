@@ -555,13 +555,13 @@ ${app_types}
 		-- Create Serval identity keypair for service, then sign service advertisement with it
 		signing_msg = printf(signing_tmpl,fields)
 		if (luci.http.formvalue("fingerprint") and is_hex(luci.http.formvalue("fingerprint")) and luci.http.formvalue("fingerprint"):len() == 64 and edit_app) then
-			resp = luci.sys.exec("echo \"" .. pass_to_shell(signing_msg) .. "\" |serval-sign -s " .. luci.http.formvalue("fingerprint"))
+			resp = luci.sys.exec("echo \"" .. pass_to_shell(signing_msg) .. "\" |serval-crypto --sign -i " .. luci.http.formvalue("fingerprint"))
 		else
 			if (not deleted_uci and edit_app and not uci:delete("applications",UUID)) then
 				DIE("Unable to remove old UCI entry")
 				return
 			end
-			resp = luci.sys.exec("echo \"" .. pass_to_shell(signing_msg) .. "\" |serval-sign -s $(servald keyring list |head -1 |grep -o ^[0-9A-F]*)")
+			resp = luci.sys.exec("echo \"" .. pass_to_shell(signing_msg) .. "\" |serval-crypto --sign -i $(servald keyring list |head -1 |grep -o ^[0-9A-F]*)")
 		end
 		if (luci.sys.exec("echo $?") ~= '0\n' or resp == '') then
 			DIE("Failed to sign service advertisement")
@@ -584,7 +584,7 @@ ${app_types}
 			service_file:write(service_string)
 			service_file:flush()
 			service_file:close()
-			luci.sys.call("/etc/init.d/avahi-daemon restart")
+			luci.sys.exec("/etc/init.d/avahi-daemon restart")
 		else
 			DIE("Failed to create avahi service file")
 			return
@@ -601,7 +601,7 @@ ${app_types}
 			DIE("Error removing Avahi service file")
 			return
 		end
-		luci.sys.call("/etc/init.d/avahi-daemon restart")
+		luci.sys.exec("/etc/init.d/avahi-daemon restart")
 	end
 	    
 	-- Commit everthing to UCI
