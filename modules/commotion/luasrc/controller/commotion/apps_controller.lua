@@ -386,6 +386,10 @@ function action_add(edit_app)
 		else
 			url_port = values.uri:match(":[0-9]+")
 			url_port = url_port and url_port:gsub(":","") or ''
+			if url_port == '' then
+			  url_port = values.uri:match("^https://") and "443" or ''
+			end
+
 		end
 		--local connect = luci.sys.exec("nc -z -w 5 \"" .. pass_to_shell(url) .. '" "' .. ((url_port and url_port ~= "" and not error_info.port) and pass_to_shell(url_port) or "80") .. '"; echo $?')
 		--if (connect:sub(-2,-2) ~= '0') then  -- exit status != 0 -> failed to resolve url
@@ -401,7 +405,7 @@ function action_add(edit_app)
 		if (count and count ~= '' and tonumber(count) >= 100) then
 			error_info.notice = "This node cannot support any more applications at this time. Please contact the node administrator or try again later."
 		else
-			UUID = uci_encode(values.uri .. values.port)
+			UUID = uci_encode(values.uri .. values.port):sub(1,254)
 			values.uuid = UUID
 		
 			uci:foreach("applications", "application", 
@@ -451,11 +455,14 @@ function action_add(edit_app)
 				return
 			end
 			deleted_uci = 1
-			UUID = uci_encode(values.uri .. values.port)
+			UUID = uci_encode(values.uri .. values.port):sub(1,254)
 			values.uuid = UUID
 		else
 			UUID = luci.http.formvalue("uuid")
 			values.uuid = UUID
+			if UUID:len() > 254 then
+			  DIE("Invalid UUID length")
+			end
 		end
 	end
 	
@@ -491,6 +498,7 @@ ${app_types}
 
 <txt-record>signature=${signature}</txt-record>
 <txt-record>fingerprint=${fingerprint}</txt-record>
+<txt-record>version=1.0</txt-record>
 </service>
 </service-group>
 ]]
@@ -541,7 +549,7 @@ ${app_types}
 		  description = values.description,
 		  ttl = values.ttl,
 		  app_types = app_types,
-		  lifetime = lifetime
+		  lifetime = values.lifetime == '0' and '0' or lifetime
 		}
 		
 		-- Create Serval identity keypair for service, then sign service advertisement with it
